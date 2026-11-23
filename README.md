@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📘 Anomaly Detection Project
 
 This report outlines the technical requirements and implementation details for a project in anomaly detection using classical machine learning and LLM-based reasoning. The purpose is to help students gain practical experience with AI techniques in a structured and guided environment. Students are 
@@ -121,3 +122,7 @@ You can earn additional credit by completing any of the following:
 | **Bonus (Optional)**                                     | **+50** |
 
 This report defines the scope and grading criteria. All students are expected to follow the instructions precisely and submit clean, working code.
+=======
+# anomaly-detection-llm
+Developed an anomaly detection system using Isolation Forest to identify anomalies in streaming sensor data
+>>>>>>> f44091f4b385d14f3ee3b24355d2e097528a7856
