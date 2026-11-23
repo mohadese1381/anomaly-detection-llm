@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📘 Anomaly Detection Project
 
 This report outlines the technical requirements and implementation details for a project in anomaly detection using classical machine learning and LLM-based reasoning. The purpose is to help students gain practical experience with AI techniques in a structured and guided environment. Students are 
