@@ -1,128 +1,160 @@
-<<<<<<< HEAD
-# 📘 Anomaly Detection Project
+# LLM-Enhanced Anomaly Detection System
 
-This report outlines the technical requirements and implementation details for a project in anomaly detection using classical machine learning and LLM-based reasoning. The purpose is to help students gain practical experience with AI techniques in a structured and guided environment. Students are 
+An unsupervised machine learning system for detecting anomalies in streaming sensor data, enhanced with Large Language Models (LLMs) to provide contextual explanations and intelligent alerts.
 
----
+## Overview
 
-## 📁 Project Structure
+This project combines classical machine learning with Large Language Models to build an anomaly detection pipeline.
 
-You are provided with the following files:
+An Isolation Forest model is trained on normal sensor data to identify unusual patterns in incoming data streams. When an anomaly is detected, an LLM is integrated through the Together AI API to classify the detected behavior, explain potential causes, and generate human-readable alerts.
 
-* `server.py` — Handles communication. **You are not required to modify this file.** It continuously sends a stream of data (mostly normal, some anomalous) to the client.
-* `client.py` — This is where you will implement anomaly detection logic. You will load a trained model and trigger an LLM-based alert when an anomaly is detected.
-* `train_model.ipynb` — This notebook is where you will generate data, train an anomaly detection model, and save it for use in `client.py`.
+The goal is to bridge the gap between anomaly detection and interpretable, actionable insights.
 
----
+## Key Features
 
-## 🎯 Project Objectives
+- **Unsupervised Anomaly Detection:** Identifying unusual sensor readings using Isolation Forest.
+- **Data Preprocessing:** Preparing and transforming sensor data for model training and inference.
+- **Real-Time Detection:** Processing incoming sensor data streams and identifying anomalies.
+- **LLM Integration:** Using a Large Language Model through Together AI API to analyze detected anomalies.
+- **Contextual Explanations:** Generating anomaly descriptions, potential causes, and readable alerts.
 
-The complete project is graded out of **100 points**. You are required to complete the core tasks and optionally implement bonus features for extra credit.
+## System Workflow
 
-### 🔧 Step-by-Step Breakdown
+1. **Data Generation:** Generate synthetic sensor data representing normal operating conditions.
+2. **Preprocessing:** Prepare sensor readings for machine learning.
+3. **Model Training:** Train an Isolation Forest model on normal sensor data.
+4. **Model Persistence:** Save the trained model for later inference.
+5. **Real-Time Inference:** Receive incoming sensor readings and classify them as normal or anomalous.
+6. **LLM-Based Analysis:** Send detected anomalies to an LLM for classification and explanation.
+7. **Alert Generation:** Display contextual alerts containing anomaly labels and potential causes.
 
-#### Step 1: Complete `train_model.ipynb` (**30 points**)
+## Technologies
 
-You must:
+| Category | Technologies |
+|---|---|
+| Programming Language | Python |
+| Machine Learning | Scikit-learn |
+| Algorithm | Isolation Forest |
+| Data Processing | NumPy, Pandas |
+| LLM Integration | Together AI API |
+| Model Persistence | Joblib |
+| Development | Jupyter Notebook |
 
-* Generate synthetic **normal** sensor data.
-* Use the **Isolation Forest** algorithm for training an anomaly detection model.
-* Save the trained model to a file (e.g., using `joblib`).
+## Project Structure
 
-#### 🔍 Isolation Forest Explanation
-
-* Isolation Forest is an unsupervised learning method.
-* It isolates anomalies by randomly selecting a feature and then randomly selecting a split value.
-* Anomalies are detected because they are more susceptible to isolation.
-
-```python
-from sklearn.ensemble import IsolationForest
-model = IsolationForest()
-model.fit(normal_data)
+```text
+anomaly-detection-llm/
+│
+├── src/
+│   ├── server.py
+│   ├── client.py
+│   └── train_model.ipynb
+│
+├── README.md
+├── requirements.txt
+├── .gitignore
+└── LICENSE
 ```
 
-#### Step 2: Update `client.py` to Detect Anomalies (**40 points**)
+*Note: The structure above describes the intended organization. File locations may vary depending on the final implementation.*
 
-In this file, you will:
+## Installation & Setup
 
-* Load your trained model.
-* Receive streaming data from the server.
-* For each incoming data point:
+### 1. Clone the repository
 
-  * Use the model to **predict if it is an anomaly**.
-  * If an anomaly is detected:
+```bash
+git clone https://github.com/mohadese1381/anomaly-detection-llm.git
 
-    * Call the Together AI API (DeepSeek LLaMA3 70B model).
-    * Send a prompt asking the LLM to label the anomaly and describe it.
-
-#### Together API Integration
-
-Use the [Together AI API](https://api.together.xyz/) to access the LLaMA3 70B model.
-
-##### 📨 Step 1: Create the Message Payload
-
-Construct your request with a system and user message:
-
-```python
-messages = [
-  {"role": "system", "content": "You are a helpful assistant that labels sensor anomalies."},
-  {"role": "user", "content": "Sensor reading: {data}
-Describe the type of anomaly and suggest a possible cause."}
-]
+cd anomaly-detection-llm
 ```
 
-##### 🔁 Step 2: Send the Request
+### 2. Create a virtual environment
 
-Use the Together client to send the request:
-
-```python
-response = self.__client.chat.completions.create(
-    model=self.__model_name,
-    messages=messages,
-    stream=False,
-)
+```bash
+python -m venv .venv
 ```
 
-⚠️ **Important:** This is a sample prompt format. You must **not copy or reuse this prompt exactly**. Adapt it responsibly for your implementation.
+Activate it:
 
-Use a readable alert format like:
-
-```python
-print("\n🚨 Anomaly Detected!\nLabel: {label}\nReason: {reason}\n")
+**Windows:**
+```bash
+.venv\Scripts\activate
 ```
 
-#### Step 3: Final Submission (**30 points**)
+**Linux / macOS:**
+```bash
+source .venv/bin/activate
+```
 
-* All TODOs in the notebook and client script must be completed.
-* Ensure code is clean and runs end-to-end.
-* Include comments and variable names that are readable.
+### 3. Install dependencies
 
----
+```bash
+pip install -r requirements.txt
+```
 
-## 🧩 Bonus Tasks (Up to 10 points)
+### 4. Configure API credentials
 
-You can earn additional credit by completing any of the following:
+Create a `.env` file or configure the environment variable:
 
-* 📊 **Visualize** normal vs anomaly points using matplotlib/seaborn. (**+10 pts**)
-* 💾 **Log detected anomalies** to a `.csv` file. (**+10 pts**)
-* 🧪 Add a **confidence score** to model predictions. (**+10 pts**)
-* 🧠 Use multiple LLM prompt templates and compare results. (**+10 pts**)
-* 🗂️ Use more complex synthetic features/patterns. (**+10 pts**)
+```env
+TOGETHER_API_KEY=your_api_key
+```
 
----
+Never commit API keys or other sensitive credentials to the repository.
 
-## ✅ Summary
+## Usage
 
-| Task                                                     | Points  |
-| -------------------------------------------------------- | ------- |
-| Complete `train_model.ipynb`                             | 30      |
-| Implement anomaly detection and LLM alert in `client.py` | 40      |
-| Final Integration and Completion                         | 30      |
-| **Total**                                                | **100** |
-| **Bonus (Optional)**                                     | **+50** |
+The general execution workflow consists of:
 
-This report defines the scope and grading criteria. All students are expected to follow the instructions precisely and submit clean, working code.
-=======
-# anomaly-detection-llm
-Developed an anomaly detection system using Isolation Forest to identify anomalies in streaming sensor data
->>>>>>> f44091f4b385d14f3ee3b24355d2e097528a7856
+1. Run the model training notebook to preprocess the data, train the Isolation Forest model, and save the trained model.
+2. Start the data streaming server.
+3. Run the client to receive sensor readings and perform anomaly detection.
+4. When an anomaly is detected, the client sends the relevant information to the LLM API and generates an explanatory alert.
+
+Refer to the source files for implementation details and execution requirements.
+
+## Example Output
+
+```text
+Anomaly Detected!
+
+Label: Unusual Sensor Reading
+
+Reason: The sensor value significantly deviates
+from the observed normal operating pattern.
+
+Possible Cause: Potential sensor malfunction
+or abnormal operating conditions.
+```
+
+*Example output for illustration purposes.*
+
+## Key Concepts
+
+- Unsupervised Machine Learning
+- Anomaly Detection
+- Isolation Forest
+- Real-Time Data Processing
+- Large Language Models (LLMs)
+- Prompt Engineering
+- AI API Integration
+- Explainable AI Applications
+
+## Limitations
+
+- The system uses synthetic sensor data rather than real-world industrial datasets.
+- Anomaly explanations generated by the LLM are potential interpretations, not verified root causes.
+- Detection performance depends on the training data and model configuration.
+- LLM-based analysis requires API connectivity and may introduce additional latency.
+
+## Acknowledgments
+
+This project was developed as part of an educational assignment on Machine Learning and LLM applications.
+
+Original project assignment: [ML Applications in CyberSecurity](https://github.com/ML-Applications-in-CyberSecurity/anomaly-detection-project-m-p)
+
+## Author
+
+**Mohadese Akhondi**
+
+[GitHub](https://github.com/mohadese1381)
